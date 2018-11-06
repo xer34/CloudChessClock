@@ -11,32 +11,16 @@
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css" integrity="sha384-Smlep5jCw/wG7hdkwQ/Z5nLIefveQRIY9nfy6xoR1uRYBtpZgI6339F5dgvm/e9B"
     crossorigin="anonymous">
   <link rel='stylesheet' href="./css/index.css">
+
   <script src="https://www.gstatic.com/firebasejs/5.5.6/firebase.js"></script>
+
 
 </head>
 
 <body>
 
 
-  <!--overwatch return buttons / hide on load  ------------------------------------------------------------- -->
 
-  <div id='goBack'>
-    <button id='goBackButton' type="button" class="btn btn-secondary">Go Back</button>
-  </div>
-
-  <div id='OgoBack'>
-    <button id='OgoBackButton' type="button" class="btn btn-secondary">Go Back</button>
-  </div>
-
-  <!-- return to landing buttons on the pre game edit list page -->
-
-  <div id='returnToLanding'>
-    <button id='returnToLandingButton' type="button" class="btn btn-secondary">Go Back</button>
-  </div>
-
-  <div id='OreturnToLanding'>
-    <button id='OreturnToLandingButton' type="button" class="btn btn-secondary">Go Back</button>
-  </div>
 
 
   <!-- splash screen -->
@@ -46,31 +30,28 @@
   <!-- landing page ------------------------------------------------------------- -->
 
   <div id='landing'>
-    <img src="./img/logo.png">  
-    
-<div class="wrapper">
-  <div class="loader">
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-  </div>
-</div>
+    <img src="./img/logo.png">
 
+    <div class="wrapper">
+      <div class="loader">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+    </div>
 
-    <button id='startButton' onclick="hideLanding()" type="button" class="btn btn-secondary">Your
-      First Turn</button>
+    <button id='initialSetup' onclick="initialSetup()" type="button" class="btn btn-dark">Initial Setup</button>
 
-    <button id='OstartButton' onclick="OhideLanding()" type="button" class="btn btn-secondary">Enemy First Turn</button>
+    <button id='startButton' onclick="hideLanding()" type="button" class="btn btn-danger">Round Start</button>
 
-    <button id='showSettingsButton' onclick="showSettings()" type="button" class="btn btn-secondary">Settings</button>
+    <button id='showSettingsButton' onclick="showSettings()" type="button" class="btn btn-dark">Settings</button>
 
-    <button id='support' onclick="aboutThisApp()" type="button" class="btn btn-secondary">About this App</button>
 
   </div>
   </div>
@@ -79,309 +60,116 @@
   <!-- your turn ------------------------------------------------------------- -->
 
   <div id='yourturn'>
-    <div class="container-fluid">
-      <div class="row">
-        <div class="col-3" id="pauseDiv">
-          <button id='pause' type="button" class="btn btn-secondary">Pause</button>
-        </div>
-
-        <div class="col-6" id='timerDiv'><span id='timerCount'>75:00</span></div>
-        <div class="col-3" id='resetDiv'>
-          <button id='startTimer' type="button" class="btn btn-secondary">Start</button>
-        </div>
-        <div class="col-4" id='counterDiv' style="text-align:center;">
-          <input id='cpNumBox' class='cpCounter' type="text" placeholder="value..." value='0' />
-          <button id='CPPlus' class='up_count btn btn-dark cpCounter' title='Up'>+<i class='icon-plus'></i></button>
-          <span id='cp'>CP</span><button id='CPMinus' class='down_count btn btn-dark cpCounter' title='Down'>-<i class='icon-minus'></i></button>
-        </div>
-        <div class="col-4" id='counterDiv' style="text-align:center;">
-          <h3>YOUR TURN <span id='turncounter'>1</span></h3>
-        </div>
-
-        <div class="col-4" id='counterDiv' style="text-align:center;">
-          <input id='vpNumBox' class='vpCounter' type="text" placeholder="value..." value='0' />
-          <button id="VPPlus" class='up_count btn btn-dark vpCounter' title='Up'>+<i class='icon-plus'></i></button>
-          <button id="VPMinus" class='down_count btn btn-dark vpCounter' title='Down'>-<i class='icon-minus'></i></button>
-          <span id='vp'>VP</span>
-        </div>
-      </div>
+    <div class="col-3" id="pauseDiv">
+      <button id='pause' type="button" class="btn btn-dark">Pause</button>
     </div>
-    <BR>
+
+    <div id='timerDiv'><span id='timerCount'>75:00</span></div>
+
+    <div class="col-3" id='resetDiv'>
+      <button id='startTimer' type="button" class="btn btn-dark">Start</button>
+    </div>
+
+
+    <button id='overwatch' type="button" class="btn btn-dark">Overwatch</button>
+    <button id='endTurn' type="button" class="btn btn-dark">End Turn</button>
+    <button id='endGame' type="button" onclick="endGame()" class="btn btn-danger">End Game</button>
+
+
+    <div class="col-4" id='cpDiv' style="text-align:center;">
+      <input id='cpNumBox' class='cpCounter' type="text" placeholder="value..." value='0' />
+      <button id='CPPlus' class='up_count btn btn-dark cpCounter' title='Up'>+<i class='icon-plus'></i></button>
+      <span id='cp'>CP</span><button id='CPMinus' class='down_count btn btn-dark cpCounter' title='Down'>-<i class='icon-minus'></i></button>
+    </div>
+
+    <div class="col-4" id='counterDiv' style="text-align:center;">
+      <h3>Player One: Turn <span id='turncounter'>1</span></h3>
+    </div>
+
+    <div class="col-4" id='vpDiv' style="text-align:center;">
+      <input id='vpNumBox' class='vpCounter' type="text" placeholder="value..." value='0' />
+      <button id="VPPlus" class='up_count btn btn-dark vpCounter' title='Up'>+<i class='icon-plus'></i></button>
+      <button id="VPMinus" class='down_count btn btn-dark vpCounter' title='Down'>-<i class='icon-minus'></i></button>
+      <span id='vp'>VP</span>
+    </div>
   </div>
 
-  <!-- accordion  ------------------------------------------------------------- -->
-
-  <div class="container-fluid" id='accordion'>
-    <button class="accordion pregame">Pre-Game</button>
-    <div class="panel pregame">
-      <div id="myDIV" class="header">
-
-        <input type="text" id="preGameInput" placeholder="Add Item">
-        <span onclick="newElement()" class="preGameInput addBtn">Add</span>
-      </div>
-
-      <ul id="myUL">
-      </ul>
-    </div>
-    <button class="accordion movement">Movement</button>
-    <div class="panel movement">
-      <div id="myDIV" class="header">
-
-        <input type="text" id="movementInput" placeholder="Add Item">
-        <span onclick="moveElement()" class="movementInput addBtn">Add</span>
-      </div>
-
-      <ul id="moveUL">
-    </div>
-
-    <button class="accordion psychic">Psychic</button>
-    <div class="panel psychic">
-      <div id="myDIV" class="header">
-
-        <input type="text" id="psychicInput" placeholder="Add Item">
-        <span onclick="newPsychicElement()" class="psychicInput addBtn">Add</span>
-      </div>
-
-      <ul id="psyUL">
-      </ul>
-    </div>
-
-    <button class="accordion shooting">Shooting</button>
-    <div class="panel shooting">
-      <div id="myDIV" class="header">
-        <input type="text" id="shootInput" placeholder="Add Item">
-        <span onclick="shootElement()" class="shootInput addBtn">Add</span>
-
-      </div>
-      <ul id="shootUL">
-    </div>
-
-    <button class="accordion charge">Charge</button>
-    <div class="panel charge">
-      <div id="myDIV" class="header">
-        <input type="text" id="chargeInput" placeholder="Add Item">
-        <span onclick="chargeElement()" class="chargeInput addBtn">Add</span>
-
-      </div>
-      <ul id="chargeUL">
-    </div>
-
-    <button class="accordion fight">Fight</button>
-    <div class="panel fight">
-      <div id="myDIV" class="header">
-        <input type="text" id="fightInput" placeholder="Add Item">
-        <span onclick="fightElement()" class="fightInput addBtn">Add</span>
-
-      </div>
-      <ul id="fightUL">
-    </div>
-
-    <button class="accordion morale">Morale</button>
-    <div class="panel morale">
-      <div id="myDIV" class="header">
-        <input type="text" id="moraleInput" placeholder="Add Item">
-        <span onclick="moraleElement()" class="moraleInput addBtn">Add</span>
-
-      </div>
-      <ul id="moraleUL">
-    </div>
-    <br>
-    <button id='endturn' type="button" class="btn btn-secondary">END
-      TURN</button>
-    <button id='overwatch' type="button" class="btn btn-secondary">OVERWATCH</button>
-    <button id='endGame' onclick='endGame()' type="button" class="btn btn-danger">END GAME</button>
-  </div>
 
   <!-- Opponent Turn Section ----------------------------------------------- -->
 
 
   <div id='opponentTurn'>
-    <div class="container-fluid">
-      <div class="row">
-        <div class="col-3" id="pauseDiv">
 
-          <button id='Opause' type="button" class="btn btn-secondary">Pause</button>
+    <div class="col-3" id="pauseDiv">
 
-        </div>
-        <div class="col-6" id='OtimerDiv'><span id='OtimerCount' style="color: red">75:00</span></div>
+      <button id='Opause' type="button" class="btn btn-dark">Pause</button>
 
-        <div class="col-3" id='resetDiv'>
-          <button id='OstartTimer' type="button" class="btn btn-secondary">Start</button>
-        </div>
-
-        <div class="col-4" id='counterDiv' style="text-align:center;">
-          <input id='cpNumBox' class='OcpCounter' type="text" placeholder="value..." value='0' />
-          <button id='CPPlus' class='up_count btn btn-dark OcpCounter' title='Up'>+<i class='icon-plus'></i></button>
-          <span id='cp'>E.<br>CP</span>
-          <button id='CPMinus' class='down_count btn btn-dark OcpCounter' title='Down'>-<i class='icon-minus'></i></button>
-        </div>
-
-        <div class="col-4" id='counterDiv' style="text-align:center;">
-          <h3 style="color: red">ENEMY TURN <span id='Oturncounter'>1</span></h3>
-        </div>
-
-        <div class="col-4" id='counterDiv' style="text-align:center;">
-          <input id='vpNumBox' class='OvpCounter' type="text" placeholder="value..." value='0' />
-          <button id='VPPlus' class='up_count btn btn-dark OvpCounter' title='Up'>+<i class='icon-plus'></i></button>
-          <button id='VPMinus' class='down_count btn btn-dark OvpCounter' title='Down'>-<i class='icon-minus'></i></button><span
-            id='vp'>E.<BR> VP </span>
-        </div>
-
-      </div>
     </div>
-  </div>
+    <div class="col-6" id='OtimerDiv'><span id='OtimerCount'>75:00</span></div>
 
-  <!-- opponent accordion ------------------------------------------------------------- -->
+    <div class="col-3" id='resetDiv'>
+      <button id='OstartTimer' type="button" class="btn btn-dark">Start</button>
+    </div>
 
-  <BR>
-  <div class="container-fluid" id='Oaccordion'>
-    <button class="accordion pregame">Pre-Game</button>
-    <div class="panel pregame">
-      <div id="myDIV" class="header">
-        <input type="text" id="OpreGameInput" placeholder="Add Item">
-        <span onclick="OnewElement()" class="OpreGameInput addBtn">Add</span>
-      </div>
-      <ul id="OmyUL">
-      </ul>
+    <button id='Ooverwatch' type="button" class="btn btn-dark">Overwatch</button>
+    <button id='OendTurn' type="button" class="btn btn-dark">End Turn</button>
+    <button id='OendGame' type="button" onclick="endGame()" class="btn btn-danger">End Game</button>
+
+    <div class="col-4" id='counterDiv' style="text-align:center;">
+      <input id='cpNumBox' class='OcpCounter' type="text" placeholder="value..." value='0' />
+      <button id='CPPlus' class='up_count btn btn-dark OcpCounter' title='Up'>+<i class='icon-plus'></i></button>
+      <span id='cp'>CP</span>
+      <button id='CPMinus' class='down_count btn btn-dark OcpCounter' title='Down'>-<i class='icon-minus'></i></button>
     </div>
-    <button class="accordion movement">Movement</button>
-    <div class="panel movement">
-      <div id="myDIV" class="header">
-        <input type="text" id="OmovementInput" placeholder="Add Item">
-        <span onclick="OmoveElement()" class="OmovementInput addBtn">Add</span>
-      </div>
-      <ul id="OmoveUL">
+
+    <div class="col-4" id='counterDiv' style="text-align:center;">
+      <h3 style="color: red"><strong>Player Two: Turn <span id='Oturncounter'>1</span></strong></h3>
     </div>
-    <button class="accordion psychic">Psychic</button>
-    <div class="panel psychic">
-      <div id="myDIV" class="header">
-        <input type="text" id="OpsychicInput" placeholder="Add Item">
-        <span onclick="OnewPsychicElement()" class="OpsychicInput addBtn">Add</span>
-      </div>
-      <ul id="OpsyUL">
-      </ul>
+
+    <div class="col-4" id='counterDiv' style="text-align:center;">
+      <input id='vpNumBox' class='OvpCounter' type="text" placeholder="value..." value='0' />
+      <button id='VPPlus' class='up_count btn btn-dark OvpCounter' title='Up'>+<i class='icon-plus'></i></button>
+      <button id='VPMinus' class='down_count btn btn-dark OvpCounter' title='Down'>-<i class='icon-minus'></i></button><span
+        id='vp'>VP</span>
     </div>
-    <button class="accordion shooting">Shooting</button>
-    <div class="panel shooting">
-      <div id="myDIV" class="header">
-        <input type="text" id="OshootInput" placeholder="Add Item">
-        <span onclick="OshootElement()" class="OshootInput addBtn">Add</span>
-      </div>
-      <ul id="OshootUL">
-    </div>
-    <button class="accordion charge">Charge</button>
-    <div class="panel charge">
-      <div id="myDIV" class="header">
-        <input type="text" id="OchargeInput" placeholder="Add Item">
-        <span onclick="OchargeElement()" class="OchargeInput addBtn">Add</span>
-      </div>
-      <ul id="OchargeUL">
-    </div>
-    <button class="accordion fight">Fight</button>
-    <div class="panel fight">
-      <div id="myDIV" class="header">
-        <input type="text" id="OfightInput" placeholder="Add Item">
-        <span onclick="OfightElement()" class="OfightInput addBtn">Add</span>
-      </div>
-      <ul id="OfightUL">
-    </div>
-    <button class="accordion morale">Morale</button>
-    <div class="panel morale">
-      <div id="myDIV" class="header">
-        <input type="text" id="OmoraleInput" placeholder="Add Item">
-        <span onclick="OmoraleElement()" class="OmoraleInput addBtn">Add</span>
-      </div>
-      <ul id="OmoraleUL">
-    </div>
-    <br>
-    <button id='Oendturn' type="button" class="btn btn-secondary">END
-      TURN</button>
-    <button id='Ooverwatch' type="button" class="btn btn-secondary">OVERWATCH</button>
-    <button id='OendGame' onclick='endGame()' type="button" class="btn btn-danger">END GAME</button>
+
 
   </div>
 
 
+
+  <button id='returnbutton' onclick="goToLanding()" type="button" class="btn btn-dark">Return</button>
 
   <!-- settings ------------------------------------------------------------- -->
 
   <div class="container-fluid" id='settings'>
 
-
-    <p>You can edit the game length time here. Please enter <strong>total</strong> game length in minutes.</p>
+    <br><br><br><br>
+    <p>You can edit the game length time here. Please enter <strong>total</strong> game length in minutes.</p><br>
     <button type="button" onclick='setGameTime()' class="btn btn-dark">Set Time</button>
+    <br><br>
 
-    <br><br>
-    <p>Edit yours or your opponents checklists before the game:</p>
-    <button id='editLists' onclick='editLists()' type="button" class="btn btn-danger">Edit Your List</button>
-    <button id='OeditLists' onclick='OeditLists()' type="button" class="btn btn-danger">Edit Opponent List</button>
-    <br><br>
-    <!-- <p>Anonymous data is currently kept on a database. This is for meta analysis and this apps development and is not used for any other purpose. You can disable it here.</p>
-    <button type="button" onclick='disableDatabase()' class="btn btn-dark">Disable Analytics</button> -->
-    <br><br>
-    <button id='returnbutton' onclick="goToLanding()" type="button" class="btn btn-secondary">Return</button>
+    <p>Here's my Patreon page, if you are into that sort of thing.</p><br>
+    <button onclick="location.href='https://www.patreon.com/xer34'" type="button" class="btn btn-danger">
+      Support Me On Patreon</button><br><br>
+
+  
+
+
+    <br>
+    <br>
 
   </div>
 
-  <!-- about this app ------------------------------------------------------------- -->
+  <!--initial setup------------------------------------------------------------- -->
 
-  <div class="container" id='aboutThisApp'>
-    <button onclick="location.href='https://www.patreon.com/xer34'" type="button">
-      Support Me On Patreon</button>
+  <div class="container-fluid" id='initialSetupDiv'><BR><BR>
+    <p>Before you can use this app, you must join or create a game. You can do this below.</p><br>
     <br>
-    <br>
-    <p>Created by an absent minded gamer, BattleTimer is your mobile Warhammer 40k Companion. <br>
-    </p>
-    <p>Currently it's features include:</p>
-    <button class="accordion"><strong>Chess Clock</strong></button>
-    <div class="panel">
-      <ul>
-        <li>Default time is 90 minute player turns. This can be changed in the settings if you input your total game
-          length in minutes. For example a 2:30 hour round would be input as a 180 minutes.</li>
-        <li>Clock will automatically pause when turn is ended.</li>
-        <li>Clock can be passed back and forth between players using the Overwatch button when the game begins. The
-          current players time will automatically pause when this is pressed.</li>
-      </ul>
-    </div>
-    <button class="accordion"><strong>Turn by Turn Checklist</strong></button>
-    <div class="panel">
-      <ul>
-        <li>Checklists can be edited prior to the game under settings.</li>
-        <li>Pregame will disappear after the first battle round.</li>
-        <li>Checklists do not have a maximum number of items, however only 9 are visible at a time.</li>
-      </ul>
-    </div>
-    <button class="accordion"><strong>VP / CP Counters</strong></button>
-    <div class="panel">
-      <ul>
-        <li>Plus and minus will add and subract. I know. Super exciting.</li>
-        <li>On soft reset of game state, these counters will reset to zero.</li>
-      </ul>
-    </div>
-    <button class="accordion"><strong>Easy to Read. Easyish to use.</strong></button>
-    <div class="panel">
-      <ul>
-        <li><b style="background-color: initial;"></b>Uses easy to read fonts, colors and styles to make things easy on
-          the eyes, also uses black where possible to save on battery life.</li>
-      </ul>
-    </div>
-    <button class="accordion"><strong>Data use and Analytics</strong></button>
-    <div class="panel">
-      <ul>
-        <li><b style="background-color: initial;"></b>Anonymous data is collected in regards to timers, list items and amount of time spent in phases.</li>
-        <li>This data is used for meta analysis and for me to get a better handle on how to structure the list database.</li>  
-        <li>In the future lists will be uploadable and downloadable. Currently I'm still working on a way of doing this and am still figuring out how to implement this feature.</li>
-        <!-- <li>If you do not not want this information collected you can disable it in the
-          settings.</li> -->
-        
-      </ul>
-    </div>
-    <br>
+    <button id='createGame' class="btn btn-dark" onclick='createGame()'>Create Game</button><br><br>
+    <button id='joinGame' class="btn btn-dark" onclick='joinGame()'>Join Game</button><br><br>
+    
 
-    <br>
-    <br>
-    <button id='returnbutton' onclick="goToLanding()" type="button" class="btn btn-secondary">Return</button>
-    <br>
   </div>
 
   <!--end game div ------------------------------------------------------------- -->
@@ -390,6 +178,7 @@
     <div class="row">
 
       <div class="col-12">
+        <br><br><br><br><br><br>
         <h2>Results:</h2>
         <h1><span id='winningPlayer'></span></h1>
       </div>
@@ -408,9 +197,7 @@
       </div>
 
     </div><BR>
-    <div id='resetGame'>
-      <button id='keepCurrent' type="button" class="btn btn-secondary">Keep Current Lists</button>
-    </div><br><br>
+
     <div id='resetGame'>
       <button id='resetGameButton' type="button" class="btn btn-danger">Reset All</button>
     </div>

@@ -1,4 +1,4 @@
-var player = ~~(Math.random() * 100000);
+var gameNumber = ~~(Math.random() * 100000);
 
 // Initialize Firebase
 var config = {
@@ -12,20 +12,47 @@ var config = {
 firebase.initializeApp(config);
 const database = firebase.database();
 
+//======================================= INTEGRATED TIMERS on FIREBASE :(
 
-//----------------------------
-function disableDatabase() {
-alert("Analytics Disabled")
-var config = {}
-firebase.initializeApp(config);
+function createGame() {
+  var gameName = prompt("Enter your game number", gameNumber);
+  alert(
+    "Your game number is " +
+      gameNumber +
+      ". Give this number to your opponent to join."
+  );
 
+  database
+    .ref()
+    .child("/Games/" + gameNumber + "/Number/")
+    .set(gameName);
+
+  goToLanding();
+}
+
+function joinGame() {
+  var gameName = prompt("Enter your game number", gameNumber);
+
+  var ref = firebase.database().ref("Games/" + gameNumber);
+  ref.once("value").then(function(snapshot) {
+    var name = snapshot.child("Number").val();
+
+    if (gameName === name) {
+      console.log(name);
+      alert("Game " + gameName + " joined.");
+      goToLanding();
+    } else {
+      console.log(name);
+      alert("Game not found!");
+    }
+  });
 }
 
 //----------------------------
 
-
 $("#splash").show();
 
+$("#returnbutton").hide();
 $("#endGameDiv").hide();
 $("#goBack").hide();
 $("#OgoBack").hide();
@@ -38,21 +65,23 @@ $("#landing").hide();
 $("#aboutThisApp").hide();
 $("#returnToLandingButton").hide();
 $("#OreturnToLandingButton").hide();
+$("#initialSetupDiv").hide();
 
 setTimeout(function() {
   $("#landing").fadeIn();
   $("#splash").hide();
-}, 1500);
+}, 1000);
 
 function hideLanding() {
   $("#landing").hide();
   $("#yourturn").fadeIn();
   $("#accordion").fadeIn();
 
-  $("#endturn").fadeIn();
+  $("#endTurn").fadeIn();
   $("#overwatch").fadeIn();
   $("#endGame").fadeIn();
   $("#settings").hide();
+  $("#initialSetupDiv").hide();
 }
 
 function OhideLanding() {
@@ -60,31 +89,33 @@ function OhideLanding() {
   $("#opponentTurn").fadeIn();
   $("#Oaccordion").fadeIn();
 
-  $("#Oendturn").fadeIn();
+  $("#OendTurn").fadeIn();
   $("#Ooverwatch").fadeIn();
   $("#OendGame").fadeIn();
   $("#settings").hide();
+  $("#initialSetupDiv").hide();
 }
 
 function showSettings() {
   $("#settings").fadeIn();
+  $("#returnbutton").fadeIn();
 
   $("#opponentTurn").hide();
   $("#yourturn").hide();
   $("#accordion").hide();
   $("#Oaccordion").hide();
   $("#landing").hide();
-
+  $("#initialSetupDiv").hide();
 }
 
-function aboutThisApp() {
-  $("#aboutThisApp").fadeIn();
+function initialSetup() {
+  $("#initialSetupDiv").fadeIn();
+  $("#returnbutton").fadeIn();
 
   $("#opponentTurn").hide();
   $("#yourturn").hide();
   $("#accordion").hide();
   $("#Oaccordion").hide();
-  $("#settings").hide();
   $("#landing").hide();
 }
 
@@ -96,33 +127,8 @@ function goToLanding() {
   $("#accordion").hide();
   $("#Oaccordion").hide();
   $("#settings").hide();
-  // $("body").css({
-  //   "background-image": 'url("./img/pic.jpg")',
-  //   "background-repeat": "no-repeat",
-  //   "background-color": "black",
-  //   "background-size": "100vw 100vh"
-  // });
-
+  $("#returnbutton").hide();
 }
-
-// ACCORDIAN ----------------------------------------------------------------------
-
-$(".accordion").click(function() {
-  if ($(this).hasClass("active")) {
-    $(this).removeClass("active");
-    $(this)
-      .next()
-      .removeClass("show");
-  } else {
-    $(".accordion").removeClass("active");
-    $(".panel").removeClass("show");
-
-    $(this).addClass("active");
-    $(this)
-      .next()
-      .addClass("show");
-  }
-});
 
 // TIMER ----------------------------------------------------------------------
 var chessClock;
@@ -155,18 +161,20 @@ function setGameTime() {
   console.log(Otime);
   database
     .ref()
-    .child("/players/" + player + "/Player1/Timer")
+    .child("/Games/" + gameNumber + "/Player1/Time")
     .set(time);
   database
     .ref()
-    .child("/players/" + player + "/Player2/Timer")
+    .child("/Games/" + gameNumber + "/Player2/Time")
     .set(Otime);
+  $("#landing").fadeIn();
+  $("#returnbutton").hide();
 }
 
 $("#startTimer").click(function() {
   database
     .ref()
-    .child("/players/" + player + "/Player1/Timer")
+    .child("/Games/" + gameNumber + "/Player1/Timer")
     .set(time);
 
   clearInterval(chessClock);
@@ -196,7 +204,7 @@ $("#pause").click(function() {
   clearInterval(chessClock);
   database
     .ref()
-    .child("/players/" + player + "/Player1/Timer")
+    .child("/Games/" + gameNumber + "/Player1/Timer")
     .set(time);
 });
 
@@ -208,7 +216,7 @@ var Otime = 4500;
 $("#OstartTimer").click(function() {
   database
     .ref()
-    .child("/players/" + player + "/Player2/Timer")
+    .child("/Games/" + gameNumber + "/Player2/Timer")
     .set(Otime);
   clearInterval(OchessClock);
   OtimerOn = true;
@@ -236,418 +244,8 @@ $("#Opause").click(function() {
   clearInterval(OchessClock);
   database
     .ref()
-    .child("/players/" + player + "/Player2/Timer")
+    .child("/Games/" + gameNumber + "/Player2/Timer")
     .set(Otime);
-});
-
-// preGameInput----------------------------------------------------------------------
-
-// Create a "close" button and append it to each list item
-var myNodelist = document.getElementsByTagName("LI");
-var i;
-for (i = 0; i < myNodelist.length; i++) {
-  var span = document.createElement("SPAN");
-  var txt = document.createTextNode("\u00D7");
-  span.className = "close";
-  span.appendChild(txt);
-  myNodelist[i].appendChild(span);
-}
-
-// Click on a close button to hide the current list item
-var close = document.getElementsByClassName("close");
-var i;
-for (i = 0; i < close.length; i++) {
-  close[i].onclick = function() {
-    var div = this.parentElement;
-    div.style.display = "none";
-  };
-}
-
-// Add a "checked" symbol when clicking on a list item
-var list = document.querySelector("#myUL");
-list.addEventListener(
-  "click",
-  function(ev) {
-    if (ev.target.tagName === "LI") {
-      ev.target.classList.toggle("checked");
-    }
-  },
-  false
-);
-
-$("#preGameInput").keyup(function(event) {
-  if (event.keyCode === 13) {
-    $(".preGameInput").click();
-  }
-});
-
-// Create a new list item when clicking on the "Add" button
-function newElement() {
-  var li = document.createElement("li");
-  var inputValue = document.getElementById("preGameInput").value;
-  var t = document.createTextNode(inputValue);
-  li.appendChild(t);
-  if (inputValue === "") {
-    alert("You must write something!");
-  } else {
-    document.getElementById("myUL").appendChild(li);
-  }
-  document.getElementById("preGameInput").value = "";
-
-  database
-    .ref()
-    .child("/players/" + player + "/Player1/pregame")
-    .push(inputValue);
-
-  var span = document.createElement("SPAN");
-  var txt = document.createTextNode("\u00D7");
-  span.className = "close";
-  span.appendChild(txt);
-  li.appendChild(span);
-
-  for (i = 0; i < close.length; i++) {
-    close[i].onclick = function() {
-      var div = this.parentElement;
-      div.style.display = "none";
-    };
-  }
-}
-// movement---------------------------------------------------------------------
-
-var list = document.querySelector("#moveUL");
-list.addEventListener(
-  "click",
-  function(ev) {
-    if (ev.target.tagName === "LI") {
-      ev.target.classList.toggle("checked");
-    }
-  },
-  false
-);
-
-// Create a new list item when clicking on the "Add" button
-function moveElement() {
-  var li = document.createElement("li");
-  var inputValue = document.getElementById("movementInput").value;
-  var t = document.createTextNode(inputValue);
-  li.appendChild(t);
-  if (inputValue === "") {
-    alert("You must write something!");
-  } else {
-    document.getElementById("moveUL").appendChild(li);
-  }
-  document.getElementById("movementInput").value = "";
-
-  database
-    .ref()
-    .child("/players/" + player + "/Player1/movement")
-    .push(inputValue);
-
-  var span = document.createElement("SPAN");
-  var txt = document.createTextNode("\u00D7");
-  span.className = "close";
-  span.appendChild(txt);
-  li.appendChild(span);
-
-  for (i = 0; i < close.length; i++) {
-    close[i].onclick = function() {
-      var div = this.parentElement;
-      div.style.display = "none";
-    };
-  }
-}
-
-$("#movementInput").keyup(function(event) {
-  if (event.keyCode === 13) {
-    $(".movementInput").click();
-  }
-});
-
-// psychicInput ----------------------------------------------------------------
-
-var list = document.querySelector("#psyUL");
-list.addEventListener(
-  "click",
-  function(ev) {
-    if (ev.target.tagName === "LI") {
-      ev.target.classList.toggle("checked");
-    }
-  },
-  false
-);
-
-function newPsychicElement() {
-  var li = document.createElement("li");
-  var inputValue = document.getElementById("psychicInput").value;
-  var t = document.createTextNode(inputValue);
-  li.appendChild(t);
-  if (inputValue === "") {
-    alert("You must write something!");
-  } else {
-    document.getElementById("psyUL").appendChild(li);
-  }
-  document.getElementById("psychicInput").value = "";
-
-  database
-    .ref()
-    .child("/players/" + player + "/Player1/psychic")
-    .push(inputValue);
-
-  var span = document.createElement("SPAN");
-  var txt = document.createTextNode("\u00D7");
-  span.className = "close";
-  span.appendChild(txt);
-  li.appendChild(span);
-
-  for (i = 0; i < close.length; i++) {
-    close[i].onclick = function() {
-      var div = this.parentElement;
-      div.style.display = "none";
-    };
-  }
-}
-
-$("#psychicInput").keyup(function(event) {
-  if (event.keyCode === 13) {
-    $(".psychicInput").click();
-  }
-});
-
-// shooting --------------------------------------------------------------------
-
-var list = document.querySelector("#shootUL");
-list.addEventListener(
-  "click",
-  function(ev) {
-    if (ev.target.tagName === "LI") {
-      ev.target.classList.toggle("checked");
-    }
-  },
-  false
-);
-
-function shootElement() {
-  var li = document.createElement("li");
-  var inputValue = document.getElementById("shootInput").value;
-  var t = document.createTextNode(inputValue);
-  li.appendChild(t);
-  if (inputValue === "") {
-    alert("You must write something!");
-  } else {
-    document.getElementById("shootUL").appendChild(li);
-  }
-  document.getElementById("shootInput").value = "";
-
-  database
-    .ref()
-    .child("/players/" + player + "/Player1/shoot")
-    .push(inputValue);
-
-  var span = document.createElement("SPAN");
-  var txt = document.createTextNode("\u00D7");
-  span.className = "close";
-  span.appendChild(txt);
-  li.appendChild(span);
-
-  for (i = 0; i < close.length; i++) {
-    close[i].onclick = function() {
-      var div = this.parentElement;
-      div.style.display = "none";
-    };
-  }
-}
-
-$("#shootInput").keyup(function(event) {
-  if (event.keyCode === 13) {
-    $(".shootInput").click();
-  }
-});
-
-// charge ----------------------------------------------------------------------
-
-var list = document.querySelector("#chargeUL");
-list.addEventListener(
-  "click",
-  function(ev) {
-    if (ev.target.tagName === "LI") {
-      ev.target.classList.toggle("checked");
-    }
-  },
-  false
-);
-
-function chargeElement() {
-  var li = document.createElement("li");
-  var inputValue = document.getElementById("chargeInput").value;
-  var t = document.createTextNode(inputValue);
-  li.appendChild(t);
-  if (inputValue === "") {
-    alert("You must write something!");
-  } else {
-    document.getElementById("chargeUL").appendChild(li);
-  }
-  document.getElementById("chargeInput").value = "";
-
-  database
-    .ref()
-    .child("/players/" + player + "/Player1/charge")
-    .push(inputValue);
-
-  var span = document.createElement("SPAN");
-  var txt = document.createTextNode("\u00D7");
-  span.className = "close";
-  span.appendChild(txt);
-  li.appendChild(span);
-
-  for (i = 0; i < close.length; i++) {
-    close[i].onclick = function() {
-      var div = this.parentElement;
-      div.style.display = "none";
-    };
-  }
-}
-
-$("#chargeInput").keyup(function(event) {
-  if (event.keyCode === 13) {
-    $(".chargeInput").click();
-  }
-});
-
-// fight ----------------------------------------------------------------------
-
-var list = document.querySelector("#fightUL");
-list.addEventListener(
-  "click",
-  function(ev) {
-    if (ev.target.tagName === "LI") {
-      ev.target.classList.toggle("checked");
-    }
-  },
-  false
-);
-
-function fightElement() {
-  var li = document.createElement("li");
-  var inputValue = document.getElementById("fightInput").value;
-  var t = document.createTextNode(inputValue);
-  li.appendChild(t);
-  if (inputValue === "") {
-    alert("You must write something!");
-  } else {
-    document.getElementById("fightUL").appendChild(li);
-  }
-  document.getElementById("fightInput").value = "";
-
-  database
-    .ref()
-    .child("/players/" + player + "/Player1/fight")
-    .push(inputValue);
-
-  var span = document.createElement("SPAN");
-  var txt = document.createTextNode("\u00D7");
-  span.className = "close";
-  span.appendChild(txt);
-  li.appendChild(span);
-
-  for (i = 0; i < close.length; i++) {
-    close[i].onclick = function() {
-      var div = this.parentElement;
-      div.style.display = "none";
-    };
-  }
-}
-
-$("#fightInput").keyup(function(event) {
-  if (event.keyCode === 13) {
-    $(".fightInput").click();
-  }
-});
-
-// morale ----------------------------------------------------------------------
-
-var list = document.querySelector("#moraleUL");
-list.addEventListener(
-  "click",
-  function(ev) {
-    if (ev.target.tagName === "LI") {
-      ev.target.classList.toggle("checked");
-    }
-  },
-  false
-);
-
-function moraleElement() {
-  var li = document.createElement("li");
-  var inputValue = document.getElementById("moraleInput").value;
-  var t = document.createTextNode(inputValue);
-  li.appendChild(t);
-  if (inputValue === "") {
-    alert("You must write something!");
-  } else {
-    document.getElementById("moraleUL").appendChild(li);
-  }
-  document.getElementById("moraleInput").value = "";
-
-  database
-    .ref()
-    .child("/players/" + player + "/Player1/morale")
-    .push(inputValue);
-
-  var span = document.createElement("SPAN");
-  var txt = document.createTextNode("\u00D7");
-  span.className = "close";
-  span.appendChild(txt);
-  li.appendChild(span);
-
-  for (i = 0; i < close.length; i++) {
-    close[i].onclick = function() {
-      var div = this.parentElement;
-      div.style.display = "none";
-    };
-  }
-}
-$("#moraleInput").keyup(function(event) {
-  if (event.keyCode === 13) {
-    $(".moraleInput").click();
-  }
-});
-//  counters ---------------------------------
-
-$(".vpCounter").click(function(e) {
-  var button_classes;
-  var value = +$(".vpCounter").val();
-  button_classes = $(e.currentTarget).prop("class");
-  if (button_classes.indexOf("up_count") !== -1) {
-    value = value + 1;
-  } else {
-    value = value - 1;
-  }
-  value = value < 0 ? 0 : value;
-  $(".vpCounter").val(value);
-  $("#player1VP").text(value);
-});
-$(".vpCounter").click(function() {
-  $(this)
-    .focus()
-    .select();
-});
-
-$(".cpCounter").click(function(e) {
-  var button_classes;
-  var value = +$(".cpCounter").val();
-  button_classes = $(e.currentTarget).prop("class");
-  if (button_classes.indexOf("up_count") !== -1) {
-    value = value + 1;
-  } else {
-    value = value - 1;
-  }
-  value = value < 0 ? 0 : value;
-  $(".cpCounter").val(value);
-});
-$(".cpCounter").click(function() {
-  $(this)
-    .focus()
-    .select();
 });
 
 //  end turn button ---------------------------------
@@ -655,7 +253,7 @@ $(".cpCounter").click(function() {
 var count = 1;
 var OCount = 1;
 
-$("#endturn").click(function() {
+$("#endTurn").click(function() {
   $("#yourturn").hide();
   $("#accordion").hide();
   $("#opponentTurn").fadeIn();
@@ -669,15 +267,17 @@ $("#endturn").click(function() {
   }
   database
     .ref()
-    .child("/players/" + player + "/Player1/Timer")
+    .child("/Games/" + gameNumber + "/Player1/Timer")
     .set(time);
   database
     .ref()
-    .child("/players/" + player + "/Player1/TurnTime")
-    .push("Turn: " + (count - 1) + " " + "Time: " + ((4500 - time) / 60).toFixed(2));
+    .child("/Games/" + gameNumber + "/Player1/TurnTime")
+    .push(
+      "Turn: " + (count - 1) + " " + "Time: " + ((4500 - time) / 60).toFixed(2)
+    );
 });
 
-$("#Oendturn").click(function() {
+$("#OendTurn").click(function() {
   $("#opponentTurn").hide();
   $("#Oaccordion").hide();
   $("#yourturn").fadeIn();
@@ -692,12 +292,18 @@ $("#Oendturn").click(function() {
   }
   database
     .ref()
-    .child("/players/" + player + "/Player2/Timer")
+    .child("/Games/" + gameNumber + "/Player2/Timer")
     .set(Otime);
   database
     .ref()
-    .child("/players/" + player + "/Player2/TurnTime")
-    .push("Turn: " + (OCount - 1) + " " + "Time: " + ((4500 - Otime) / 60).toFixed(2));
+    .child("/Games/" + gameNumber + "/Player2/TurnTime")
+    .push(
+      "Turn: " +
+        (OCount - 1) +
+        " " +
+        "Time: " +
+        ((4500 - Otime) / 60).toFixed(2)
+    );
 });
 
 // OVERWATCH button ------------------------------------------------
@@ -736,6 +342,44 @@ $("#OgoBack").click(function() {
   clearInterval(chessClock);
   console.log("stopping");
   $("#OgoBack").hide();
+});
+//   counters ---------------------------------
+
+$(".vpCounter").click(function(e) {
+  var button_classes;
+  var value = +$(".vpCounter").val();
+  button_classes = $(e.currentTarget).prop("class");
+  if (button_classes.indexOf("up_count") !== -1) {
+    value = value + 1;
+  } else {
+    value = value - 1;
+  }
+  value = value < 0 ? 0 : value;
+  $(".vpCounter").val(value);
+  $("#player1VP").text(value);
+});
+$(".vpCounter").click(function() {
+  $(this)
+    .focus()
+    .select();
+});
+
+$(".cpCounter").click(function(e) {
+  var button_classes;
+  var value = +$(".cpCounter").val();
+  button_classes = $(e.currentTarget).prop("class");
+  if (button_classes.indexOf("up_count") !== -1) {
+    value = value + 1;
+  } else {
+    value = value - 1;
+  }
+  value = value < 0 ? 0 : value;
+  $(".cpCounter").val(value);
+});
+$(".cpCounter").click(function() {
+  $(this)
+    .focus()
+    .select();
 });
 
 //  OPPONENT counters ---------------------------------
@@ -777,424 +421,19 @@ $(".OcpCounter").click(function() {
     .select();
 });
 
-// ------------------------------------------------------------------
-
-// opponent accordians -----------------------------------------------
-// opponent preGame---------------------------------------------------------------------
-
-var list = document.querySelector("#OmyUL");
-list.addEventListener(
-  "click",
-  function(ev) {
-    if (ev.target.tagName === "LI") {
-      ev.target.classList.toggle("checked");
-    }
-  },
-  false
-);
-
-// Create a new list item when clicking on the "Add" button
-function OnewElement() {
-  var li = document.createElement("li");
-  var inputValue = document.getElementById("OpreGameInput").value;
-  var t = document.createTextNode(inputValue);
-  li.appendChild(t);
-  if (inputValue === "") {
-    alert("You must write something!");
-  } else {
-    document.getElementById("OmyUL").appendChild(li);
-  }
-  document.getElementById("OpreGameInput").value = "";
-
-  database
-    .ref()
-    .child("/players/" + player + "/Player2/Pregame")
-    .push(inputValue);
-
-  var span = document.createElement("SPAN");
-  var txt = document.createTextNode("\u00D7");
-  span.className = "close";
-  span.appendChild(txt);
-  li.appendChild(span);
-
-  for (i = 0; i < close.length; i++) {
-    close[i].onclick = function() {
-      var div = this.parentElement;
-      div.style.display = "none";
-    };
-  }
-}
-$("#OpreGameInput").keyup(function(event) {
-  if (event.keyCode === 13) {
-    $(".OpreGameInput").click();
-  }
-});
-
-// opponent movement---------------------------------------------------------------------
-
-var list = document.querySelector("#OmoveUL");
-list.addEventListener(
-  "click",
-  function(ev) {
-    if (ev.target.tagName === "LI") {
-      ev.target.classList.toggle("checked");
-    }
-  },
-  false
-);
-
-// Create a new list item when clicking on the "Add" button
-function OmoveElement() {
-  var li = document.createElement("li");
-  var inputValue = document.getElementById("OmovementInput").value;
-  var t = document.createTextNode(inputValue);
-  li.appendChild(t);
-  if (inputValue === "") {
-    alert("You must write something!");
-  } else {
-    document.getElementById("OmoveUL").appendChild(li);
-  }
-  document.getElementById("OmovementInput").value = "";
-
-  database
-    .ref()
-    .child("/players/" + player + "/Player2/Movement")
-    .push(inputValue);
-
-  var span = document.createElement("SPAN");
-  var txt = document.createTextNode("\u00D7");
-  span.className = "close";
-  span.appendChild(txt);
-  li.appendChild(span);
-
-  for (i = 0; i < close.length; i++) {
-    close[i].onclick = function() {
-      var div = this.parentElement;
-      div.style.display = "none";
-    };
-  }
-}
-$("#OmovementInput").keyup(function(event) {
-  if (event.keyCode === 13) {
-    $(".OmovementInput").click();
-  }
-});
-// opponent psychicInput ----------------------------------------------------------------
-
-var list = document.querySelector("#OpsyUL");
-list.addEventListener(
-  "click",
-  function(ev) {
-    if (ev.target.tagName === "LI") {
-      ev.target.classList.toggle("checked");
-    }
-  },
-  false
-);
-
-function OnewPsychicElement() {
-  var li = document.createElement("li");
-  var inputValue = document.getElementById("OpsychicInput").value;
-  var t = document.createTextNode(inputValue);
-  li.appendChild(t);
-  if (inputValue === "") {
-    alert("You must write something!");
-  } else {
-    document.getElementById("OpsyUL").appendChild(li);
-  }
-  document.getElementById("OpsychicInput").value = "";
-
-  database
-    .ref()
-    .child("/players/" + player + "/Player2/Psychic")
-    .push(inputValue);
-
-  var span = document.createElement("SPAN");
-  var txt = document.createTextNode("\u00D7");
-  span.className = "close";
-  span.appendChild(txt);
-  li.appendChild(span);
-
-  for (i = 0; i < close.length; i++) {
-    close[i].onclick = function() {
-      var div = this.parentElement;
-      div.style.display = "none";
-    };
-  }
-}
-$("#OpsychicInput").keyup(function(event) {
-  if (event.keyCode === 13) {
-    $(".OpsychicInput").click();
-  }
-});
-// opponent shooting --------------------------------------------------------------------
-
-var list = document.querySelector("#OshootUL");
-list.addEventListener(
-  "click",
-  function(ev) {
-    if (ev.target.tagName === "LI") {
-      ev.target.classList.toggle("checked");
-    }
-  },
-  false
-);
-
-function OshootElement() {
-  var li = document.createElement("li");
-  var inputValue = document.getElementById("OshootInput").value;
-  var t = document.createTextNode(inputValue);
-  li.appendChild(t);
-  if (inputValue === "") {
-    alert("You must write something!");
-  } else {
-    document.getElementById("OshootUL").appendChild(li);
-  }
-  document.getElementById("OshootInput").value = "";
-
-  database
-    .ref()
-    .child("/players/" + player + "/Player2/Shoot")
-    .push(inputValue);
-
-  var span = document.createElement("SPAN");
-  var txt = document.createTextNode("\u00D7");
-  span.className = "close";
-  span.appendChild(txt);
-  li.appendChild(span);
-
-  for (i = 0; i < close.length; i++) {
-    close[i].onclick = function() {
-      var div = this.parentElement;
-      div.style.display = "none";
-    };
-  }
-}
-$("#OshootInput").keyup(function(event) {
-  if (event.keyCode === 13) {
-    $(".OshootInput").click();
-  }
-});
-// opponent charge ----------------------------------------------------------------------
-
-var list = document.querySelector("#OchargeUL");
-list.addEventListener(
-  "click",
-  function(ev) {
-    if (ev.target.tagName === "LI") {
-      ev.target.classList.toggle("checked");
-    }
-  },
-  false
-);
-
-function OchargeElement() {
-  var li = document.createElement("li");
-  var inputValue = document.getElementById("OchargeInput").value;
-  var t = document.createTextNode(inputValue);
-  li.appendChild(t);
-  if (inputValue === "") {
-    alert("You must write something!");
-  } else {
-    document.getElementById("OchargeUL").appendChild(li);
-  }
-  document.getElementById("OchargeInput").value = "";
-
-  database
-    .ref()
-    .child("/players/" + player + "/Player2/Charge")
-    .push(inputValue);
-
-  var span = document.createElement("SPAN");
-  var txt = document.createTextNode("\u00D7");
-  span.className = "close";
-  span.appendChild(txt);
-  li.appendChild(span);
-
-  for (i = 0; i < close.length; i++) {
-    close[i].onclick = function() {
-      var div = this.parentElement;
-      div.style.display = "none";
-    };
-  }
-}
-$("#OchargeInput").keyup(function(event) {
-  if (event.keyCode === 13) {
-    $(".OchargeInput").click();
-  }
-});
-// opponent fight ----------------------------------------------------------------------
-
-var list = document.querySelector("#OfightUL");
-list.addEventListener(
-  "click",
-  function(ev) {
-    if (ev.target.tagName === "LI") {
-      ev.target.classList.toggle("checked");
-    }
-  },
-  false
-);
-
-function OfightElement() {
-  var li = document.createElement("li");
-  var inputValue = document.getElementById("OfightInput").value;
-  var t = document.createTextNode(inputValue);
-  li.appendChild(t);
-  if (inputValue === "") {
-    alert("You must write something!");
-  } else {
-    document.getElementById("OfightUL").appendChild(li);
-  }
-  document.getElementById("OfightInput").value = "";
-
-  database
-    .ref()
-    .child("/players/" + player + "/Player2/Fight")
-    .push(inputValue);
-
-  var span = document.createElement("SPAN");
-  var txt = document.createTextNode("\u00D7");
-  span.className = "close";
-  span.appendChild(txt);
-  li.appendChild(span);
-
-  for (i = 0; i < close.length; i++) {
-    close[i].onclick = function() {
-      var div = this.parentElement;
-      div.style.display = "none";
-    };
-  }
-}
-$("#OfightInput").keyup(function(event) {
-  if (event.keyCode === 13) {
-    $(".OfightInput").click();
-  }
-});
-// opponent morale ----------------------------------------------------------------------
-
-var list = document.querySelector("#OmoraleUL");
-list.addEventListener(
-  "click",
-  function(ev) {
-    if (ev.target.tagName === "LI") {
-      ev.target.classList.toggle("checked");
-    }
-  },
-  false
-);
-
-function OmoraleElement() {
-  var li = document.createElement("li");
-  var inputValue = document.getElementById("OmoraleInput").value;
-  var t = document.createTextNode(inputValue);
-  li.appendChild(t);
-  if (inputValue === "") {
-    alert("You must write something!");
-  } else {
-    document.getElementById("OmoraleUL").appendChild(li);
-  }
-  document.getElementById("OmoraleInput").value = "";
-
-  database
-    .ref()
-    .child("/players/Player2" + player + "/Player2/Morale")
-    .push(inputValue);
-
-  var span = document.createElement("SPAN");
-  var txt = document.createTextNode("\u00D7");
-  span.className = "close";
-  span.appendChild(txt);
-  li.appendChild(span);
-
-  for (i = 0; i < close.length; i++) {
-    close[i].onclick = function() {
-      var div = this.parentElement;
-      div.style.display = "none";
-    };
-  }
-}
-$("#OmoraleInput").keyup(function(event) {
-  if (event.keyCode === 13) {
-    $(".OmoraleInput").click();
-  }
-});
-// disable back button, hopefully ----------------------------------------------------------------------
-
-document.addEventListener("deviceready", onDeviceReady, false);
-function onDeviceReady() {
-  document.addEventListener(
-    "backbutton",
-    function(e) {
-      e.preventDefault();
-    },
-    false
-  );
-}
-
-// edit list pregame ----------------------------------------------------------------------
-
-function editLists() {
-  $("#endGameDiv").hide();
-  $("#goBack").hide();
-  $("#OgoBack").hide();
-  $("#opponentTurn").hide();
-  $("#yourturn").hide();
-  $("#accordion").fadeIn();
-  $("#Oaccordion").hide();
-  $("#settings").hide();
-  $("#landing").hide();
-  $("#aboutThisApp").hide();
-
-  $("#endturn").hide();
-  $("#overwatch").hide();
-  $("#endGame").hide();
-
-  $("#returnToLandingButton").show();
-}
+// return to landing buttons
 
 $("#returnToLandingButton").click(function() {
   $("#accordion").hide();
   $("#landing").fadeIn();
   $("#returnToLandingButton").hide();
-  // $("body").css({
-  //   "background-image": 'url("./img/pic.jpg")',
-  //   "background-repeat": "no-repeat",
-  //   "background-color": "black",
-  //   "background-size": "100vw 100vh"
-  // });
 });
 
 $("#OreturnToLandingButton").click(function() {
   $("#Oaccordion").hide();
   $("#landing").fadeIn();
   $("#OreturnToLandingButton").hide();
-  // $("body").css({
-  //   "background-image": 'url("./img/pic.jpg")',
-  //   "background-repeat": "no-repeat",
-  //   "background-color": "black",
-  //   "background-size": "100vw 100vh"
-  // });
 });
-
-function OeditLists() {
-  $("#endGameDiv").hide();
-  $("#goBack").hide();
-  $("#OgoBack").hide();
-  $("#opponentTurn").hide();
-  $("#yourturn").hide();
-  $("#accordion").hide();
-  $("#Oaccordion").fadeIn();
-  $("#settings").hide();
-  $("#landing").hide();
-  $("#aboutThisApp").hide();
-
-  $("#Oendturn").hide();
-  $("#Ooverwatch").hide();
-  $("#OendGame").hide();
-
-  $("#OreturnToLandingButton").show();
-}
 
 // end game button -----------------------------------------
 
@@ -1213,11 +452,11 @@ function endGame() {
     $("#landing").hide();
     $("#aboutThisApp").hide();
     if ($("#player1VP").text() > $("#player2VP").text()) {
-      $("#winningPlayer").text("You Win!");
+      $("#winningPlayer").text("Player One Wins!");
     } else if ($("#player1VP").text() == $("#player2VP").text()) {
       $("#winningPlayer").text("Round Draw");
     } else {
-      $("#winningPlayer").text("You Lose!");
+      $("#winningPlayer").text("Player Two Wins!");
     }
   }
 }
@@ -1262,13 +501,6 @@ $("#keepCurrent").click(function() {
   $("#settings").hide();
   console.log(time);
   console.log(Otime);
-
-  // $("body").css({
-  //   "background-image": 'url("./img/pic.jpg")',
-  //   "background-repeat": "no-repeat",
-  //   "background-color": "black",
-  //   "background-size": "100vw 100vh"
-  // });
 });
 
 $("#resetGameButton").click(function() {
@@ -1278,4 +510,3 @@ $("#resetGameButton").click(function() {
     location.reload();
   }
 });
-

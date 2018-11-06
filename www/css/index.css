@@ -1,29 +1,10 @@
 body {
   /* background-image: url("../img/pic.jpg"); */
   background-repeat: no-repeat;
-  background-color: black;
   color: white;
   background-size: 100vw 100vh;
 }
 
-#endTurn {
-  width: 33.3%;
-}
-#overwatch {
-  width: 33.3%;
-}
-#endGame {
-  width: 33.3%;
-}
-#OendTurn {
-  width: 33.3%;
-}
-#Ooverwatch {
-  width: 33.3%;
-}
-#OendGame {
-  width: 33.33%;
-}
 #endGameDiv {
   text-align: center;
 }
@@ -86,9 +67,6 @@ body {
   left: 25%;
 }
 
-
-
-
 #splash {
   width: 100vw;
   height: 100vh;
@@ -99,74 +77,140 @@ body {
 #yourturn {
   position: fixed;
 }
-#accordion {
-  position: absolute;
-  top: 30%;
-}
+
 #opponentTurn {
   position: fixed;
 }
-#Oaccordion {
-  position: absolute;
-  top: 30%;
-}
+
 #landing {
   height: 100%;
   color: white;
   font-size: 40px;
   text-align: center;
 }
-#pauseDiv {
-  background: black;
-}
-#resetDiv {
-  background:black;
+#overwatch {
+  position: fixed;
+  bottom: 2%;
+  left: 34%;
+  font-size: 20px;
+  width: 33.3%;
 }
 #pause {
   position: fixed;
-  top: 3%;
+  bottom: 2%;
   left: 6%;
-
+  font-size: 20px;
+  width: 25%;
 }
 #startTimer {
   position: fixed;
-  top: 3%;
-  right: 6%;
+  bottom: 2%;
+  right: 5%;
+  font-size: 20px;
+  width: 25%;
 }
-#OstartTimer {
+#endTurn {
   position: fixed;
-  top: 3%;
-  right: 7%;
+  top: 2%;
+  left: 5%;
+  font-size: 20px;
+  width: 33.3%;
+}
+
+#endGame {
+  position: fixed;
+  top: 2%;
+  right: 5%;
+  font-size: 20px;
+  width: 33.3%;
+}
+
+#Ooverwatch {
+  position: fixed;
+  bottom: 2%;
+  left: 34%;
+  font-size: 20px;
+  width: 33.3%;
 }
 #Opause {
   position: fixed;
-  top: 3%;
-  left: 7%;
+  bottom: 2%;
+  left: 6%;
+  font-size: 20px;
+  width: 25%;
 }
-#Oreset {
+#OstartTimer {
   position: fixed;
-  top: 3%;
-  right: 7%;
+  bottom: 2%;
+  right: 5%;
+  font-size: 20px;
+  width: 25%;
 }
+#OendTurn {
+  position: fixed;
+  top: 2%;
+  left: 5%;
+  font-size: 20px;
+  width: 33.3%;
+}
+
+#OendGame {
+  position: fixed;
+  top: 2%;
+  right: 5%;
+  font-size: 20px;
+  width: 33.3%;
+}
+
 #counterDiv {
-  background: black;
+  position: fixed;
+  left: 33.3%;
+  top: 10%;
   color: white;
 }
 #timerDiv {
-  background: black;
   height: 80px;
-  font-size: 45px;
+  font-size: 80px;
   text-align: center;
   color: white;
   cursor: pointer;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  margin-top: -50px;
+  margin-left: -100px;
 }
 #OtimerDiv {
-  background: black;
   height: 80px;
-  font-size: 45px;
+  font-size: 80px;
   text-align: center;
   color: white;
   cursor: pointer;
+  position: fixed;
+  top: 50%;
+  left: 46%;
+  margin-top: -50px;
+  margin-left: -100px;
+}
+
+#OtimerCount {
+  color: red;
+}
+
+
+#initialSetup {
+  position: fixed;
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: auto;
+  width: 50%;
+  top: 70%;
+  left: 25%;
 }
 #startButton {
   position: fixed;
@@ -179,21 +223,7 @@ body {
   font-size: 16px;
   margin: auto;
   width: 50%;
-  top: 65%;
-  left: 25%;
-}
-#OstartButton {
-  position: fixed;
-  border: none;
-  color: white;
-  padding: 15px 32px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 16px;
-  margin: auto;
-  width: 50%;
-  top: 75%;
+  top: 80%;
   left: 25%;
 }
 #showSettingsButton {
@@ -206,7 +236,7 @@ body {
   margin: auto;
   width: 40%;
   height: 35px;
-  top: 85%;
+  top: 90%;
   left: 30%;
 }
 #support {
@@ -223,6 +253,7 @@ body {
   left: 30%;
 }
 #returnbutton {
+  position: fixed;
   border: none;
   color: white;
   text-align: center;
@@ -231,203 +262,17 @@ body {
   margin: auto;
   width: 40%;
   height: 35px;
+  top: 92%;
+  left: 30%;
 }
-ol {
-  color: white;
-  font-size: 14px;
-  line-height: 1em;
-  margin: 0;
-  padding: 0.2em 25%;
-}
+
 #button:hover {
   cursor: pointer;
   opacity: 0.8;
 }
-button.pregame {
-  background-color: #9a9c00;
-}
-button.movement {
-  background-color: #9a4b4b;
-}
-button.psychic {
-  background-color: #974b9a;
-}
-button.shooting {
-  background-color: #584b9a;
-}
-button.charge {
-  background-color: #4b959a;
-}
-button.fight {
-  background-color: #4e9a4b;
-}
-button.morale {
-  background-color: #9a874b;
-}
-.phaseRow {
-  color: white;
-  height: 57px;
-}
-button.accordion {
-  cursor: pointer;
-  width: 100%;
-  height: 50px;
-  border: none;
-  text-align: left;
-  outline: none;
-  font-size: 18px;
-  transition: 0.4s;
-  margin: ".5px 0";
-  border-bottom: none;
-}
-button.accordion.active,
-button.accordion:hover {
-  color: white;
-}
-button.accordion:before {
-  font-size: 9px;
-  float: left;
-  margin: ".5px 0";
-  border-bottom: none;
-}
-div.panel {
-  background-color: grey;
-  max-height: 0;
-  padding-left: 15px;
-  overflow: hidden;
-  padding-top: 0px;
-  border-bottom: 4px solid #ccc;
-  transition: 0.6s ease-in-out;
-  opacity: 0;
-  border-bottom: none;
-}
-.panel-icon {
-  margin-right: 10px;
-}
-.panel h5 {
-  font-size: 15px;
-  line-height: 23px;
-  margin-top: 5px;
-  margin-bottom: 0px;
-  display: inline-block;
-  color: #2d2d2d;
-}
-.panel p {
-  font-size: 15px;
-  line-height: 23px;
-  padding: 15px 30px 20px 0;
-  color: whitesmoke;
-}
-div.panel.show {
-  opacity: 1;
-  max-height: 500px;
-  margin: ".5px 0";
-}
-#aboutText {
-  font-size: 14px;
-}
+
 /* ----------------------------------------------------- */
-/* Include the padding and border in an element's total width and height */
-* {
-  box-sizing: border-box;
-}
-/* Remove margins and padding from the list */
-ul {
-  margin: 0;
-  padding: 0;
-}
-/* Style the list items */
-ul li {
-  cursor: pointer;
-  position: relative;
-  padding: 12px 25px 12px 20%;
-  background: darkgray;
-  font-size: 18px;
-  transition: 0.2s;
-  color: white;
-  /* make the list items unselectable */
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-}
-/* Set all odd list items to a different color (zebra-stripes) */
-ul li:nth-child(odd) {
-  background: #494949;
-}
-/* Darker background-color on hover */
-ul li:hover {
-  background: rgb(37, 37, 37);
-}
-/* When clicked on, add a background color and strike out text */
-ul li.checked {
-  background: #888;
-  color: rgb(0, 0, 0);
-  text-decoration: line-through;
-}
-/* Add a "checked" mark when clicked on */
-ul li.checked::before {
-  content: "";
-  position: absolute;
-  border-color: #fff;
-  border-style: solid;
-  border-width: 0 2px 2px 0;
-  top: 10px;
-  left: 16px;
-  transform: rotate(45deg);
-  height: 15px;
-  width: 7px;
-}
-/* Style the close button */
-.close {
-  position: absolute;
-  right: 0;
-  top: 0;
-  padding: 12px 16px 12px 16px;
-}
-.close:hover {
-  background-color: grey;
-  color: white;
-}
-/* Style the header */
-.header {
-  background-color: grey;
-  padding: 0 20% 0 20%;
-  color: white;
-  text-align: center;
-}
-/* Clear floats after the header */
-.header:after {
-  content: "";
-  display: table;
-  clear: both;
-}
-/* Style the input */
-input {
-  margin: 0;
-  border: none;
-  border-radius: 0;
-  width: 75%;
-  padding: 10px;
-  float: left;
-  font-size: 16px;
-}
-/* Style the "Add" button */
-.addBtn {
-  padding: 10px;
-  width: 25%;
-  background: #979797;
-  color: rgb(34, 34, 34);
-  float: left;
-  text-align: center;
-  font-size: 16px;
-  cursor: pointer;
-  transition: 0.3s;
-  border-radius: 0;
-}
-.addBtn:hover {
-  background-color: #bbb;
-}
+
 /* plus and minus button styling  ------------------------  */
 .cpCounter {
   width: 45px;
@@ -468,24 +313,24 @@ input {
 #VPPlus {
   position: fixed;
   top: 10%;
-  right: 15%;
+  right: 17%;
   height: 45px;
 }
 #CPPlus {
   position: fixed;
   top: 10%;
-  left: 15%;
+  left: 17%;
 }
 #VPMinus {
   position: fixed;
-  top: 17%;
-  right: 15%;
+  top: 18%;
+  right: 17%;
   height: 45px;
 }
 #CPMinus {
   position: fixed;
-  top: 17%;
-  left: 15%;
+  top: 18%;
+  left: 17%;
 }
 #vpNumBox {
   position: fixed;
@@ -503,7 +348,6 @@ input {
   height: 45px;
 }
 
-
 /* ---------------------------- cool loader css ----------------------------- */
 
 .wrapper {
@@ -512,7 +356,7 @@ input {
   height: 2px;
   left: 0;
   right: 0;
- top: 15%;
+  top: 15%;
   margin: auto;
 }
 
@@ -520,54 +364,54 @@ input {
   height: 100%;
   display: flex;
   -webkit-transform: translateZ(0);
-          transform: translateZ(0);
+  transform: translateZ(0);
 }
 .loader div {
   flex: 1;
   background: salmon;
   -webkit-animation: go 0.8s infinite alternate ease;
-          animation: go 0.8s infinite alternate ease;
+  animation: go 0.8s infinite alternate ease;
   box-shadow: 0 0 20px salmon;
 }
 .loader div:nth-child(1) {
   -webkit-animation-delay: -0.72s;
-          animation-delay: -0.72s;
+  animation-delay: -0.72s;
 }
 .loader div:nth-child(2) {
   -webkit-animation-delay: -0.64s;
-          animation-delay: -0.64s;
+  animation-delay: -0.64s;
 }
 .loader div:nth-child(3) {
   -webkit-animation-delay: -0.56s;
-          animation-delay: -0.56s;
+  animation-delay: -0.56s;
 }
 .loader div:nth-child(4) {
   -webkit-animation-delay: -0.48s;
-          animation-delay: -0.48s;
+  animation-delay: -0.48s;
 }
 .loader div:nth-child(5) {
   -webkit-animation-delay: -0.4s;
-          animation-delay: -0.4s;
+  animation-delay: -0.4s;
 }
 .loader div:nth-child(6) {
   -webkit-animation-delay: -0.32s;
-          animation-delay: -0.32s;
+  animation-delay: -0.32s;
 }
 .loader div:nth-child(7) {
   -webkit-animation-delay: -0.24s;
-          animation-delay: -0.24s;
+  animation-delay: -0.24s;
 }
 .loader div:nth-child(8) {
   -webkit-animation-delay: -0.16s;
-          animation-delay: -0.16s;
+  animation-delay: -0.16s;
 }
 .loader div:nth-child(9) {
   -webkit-animation-delay: -0.08s;
-          animation-delay: -0.08s;
+  animation-delay: -0.08s;
 }
 .loader div:nth-child(10) {
   -webkit-animation-delay: 0s;
-          animation-delay: 0s;
+  animation-delay: 0s;
 }
 
 @-webkit-keyframes go {
@@ -584,4 +428,18 @@ input {
     flex: 10;
     box-shadow: 0 0 0 transparent;
   }
+}
+
+html,
+body {
+  height: 100%;
+}
+body {
+  background: #0f3854;
+  background: radial-gradient(ellipse at center, #0a2e38 0%, #000000 70%);
+  background-size: 100%;
+}
+p {
+  margin: 0;
+  padding: 0;
 }
